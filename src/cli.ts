@@ -2,7 +2,7 @@ import execa from 'execa';
 import fs from 'fs';
 import { dirname, join, resolve } from 'path';
 import yargs from 'yargs';
-import { buildCompose } from './buildCompose';
+import { buildComposeProject } from './buildComposeProject';
 
 require('ts-node/register');
 
@@ -36,7 +36,7 @@ yargs
             const targetDir = join(configDir, targetDirBaseName);
             await fs.promises.mkdir(targetDir, { recursive: true });
             const { spec } = require(resolve(config));
-            const { composeFile } = await buildCompose(spec, targetDir);
+            const { composeFile } = await buildComposeProject(spec, targetDir);
 
             const args = [
                 'stack',
@@ -79,7 +79,7 @@ yargs
 
             await fs.promises.mkdir(targetDir, { recursive: true });
             const { spec } = require(resolve(configFileName));
-            await buildCompose(spec, targetDir);
+            await buildComposeProject(spec, targetDir);
         }
     ).argv;
 

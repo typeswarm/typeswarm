@@ -1,6 +1,6 @@
 {
     "name": "enxame",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -10,16 +10,13 @@
         "build:types": "tsc --emitDeclarationOnly",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
         "dev:deploy": "npm run build && node lib/cli deploy -x virtual-cluster -s test-enxame -c ./src/examples/wordpress.ts",
-        "dev:render": "npm run build && node lib/cli render -c ./src/examples/wordpress.ts -o ./src/examples/render.enxame-bundle"
+        "dev:render": "npm run build && node lib/cli render -c ./src/examples/wordpress.ts -o ./src/examples/wordpress.compose"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@types/node": "^14.6.1",
-        "axios": "^0.20.0",
         "execa": "^4.0.3",
-        "json-schema-to-typescript": "^9.1.1",
         "md5": "^2.3.0",
         "ts-node": "^9.0.0",
         "yaml": "^1.10.0",
@@ -32,7 +29,10 @@
         "@babel/preset-env": "^7.11.0",
         "@babel/preset-typescript": "^7.10.4",
         "@types/md5": "^2.2.0",
+        "@types/node": "^14.6.2",
         "@types/yargs": "^15.0.5",
+        "axios": "^0.20.0",
+        "json-schema-to-typescript": "^9.1.1",
         "typescript": "^4.0.2"
     }
 }
