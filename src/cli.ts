@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import execa from 'execa';
 import fs from 'fs';
 import { dirname, join, resolve } from 'path';

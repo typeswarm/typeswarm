@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "bin": {
-        "enxame": "node ./lib/cli.js"
+        "enxame": "./lib/cli.js"
     },
     "files": [
         "lib"
