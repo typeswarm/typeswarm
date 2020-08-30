@@ -2,6 +2,9 @@
     "name": "enxame",
     "version": "0.0.6",
     "description": "",
+    "keywords": [],
+    "license": "ISC",
+    "author": "",
     "main": "index.js",
     "bin": {
         "enxame": "./lib/cli.js"
@@ -10,17 +13,15 @@
         "lib"
     ],
     "scripts": {
-        "type-check": "tsc --noEmit",
-        "type-check:watch": "npm run type-check -- --watch",
         "build": "npm run build:types && npm run build:js",
-        "build:types": "tsc --emitDeclarationOnly",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+        "build:types": "tsc --emitDeclarationOnly",
         "dev:deploy": "npm run build && node lib/cli deploy -x virtual-cluster -s test-enxame -c ./src/examples/wordpress.ts",
-        "dev:render": "npm run build && node lib/cli render -c ./src/examples/wordpress.ts -o ./src/examples/wordpress.compose"
+        "dev:render": "npm run build && node lib/cli render -c ./src/examples/wordpress.ts -o ./src/examples/wordpress.compose",
+        "prepublish": "npm run build",
+        "type-check": "tsc --noEmit",
+        "type-check:watch": "npm run type-check -- --watch"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
     "dependencies": {
         "execa": "^4.0.3",
         "md5": "^2.3.0",
