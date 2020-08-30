@@ -5,7 +5,8 @@
     "keywords": [],
     "license": "ISC",
     "author": "",
-    "main": "index.js",
+    "main": "./lib/enxame.js",
+    "types": "./lib/enxame.d.ts",
     "bin": {
         "enxame": "./lib/cli.js"
     },

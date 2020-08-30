@@ -1,12 +1,11 @@
 import fs from 'fs';
 import { basename, join } from 'path';
-import YAML from 'yaml';
 import {
     ComposeSpecification,
     DefinitionsConfig,
+    DefinitionsSecret,
     PropertiesConfigs,
     PropertiesServices,
-    DefinitionsSecret,
 } from './compose-spec';
 import { getHash } from './utils';
 

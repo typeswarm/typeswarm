@@ -5,8 +5,9 @@ import fs from 'fs';
 import { dirname, join, resolve } from 'path';
 import yargs from 'yargs';
 import { buildComposeProject } from './buildComposeProject';
+import { register } from 'ts-node';
 
-require('ts-node/register');
+register({});
 
 yargs
     .command(
@@ -84,8 +85,3 @@ yargs
             await buildComposeProject(spec, targetDir);
         }
     ).argv;
-
-// const dir = '../src/examples';
-// const file = 'wordpress.ts';
-// const result = require(join(dir, file));
-// console.log('result', result);
