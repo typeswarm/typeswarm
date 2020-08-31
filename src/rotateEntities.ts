@@ -8,11 +8,13 @@ import {
     PropertiesServices,
 } from './compose-spec';
 import { getHash } from './utils';
+import { Logger } from 'tslog';
 
 const rotateSingleEntity = async (
     name: string,
     entity: DefinitionsConfig | DefinitionsSecret,
-    directory: string
+    directory: string,
+    logger: Logger
 ): Promise<{ rotatedEntityName: string; rotatedEntityFile: string }> => {
     if (!entity.file && !entity.data) {
         throw new Error(
@@ -30,6 +32,7 @@ const rotateSingleEntity = async (
         : `${hash}.${basename(entity.file as string)}`;
 
     const rotatedEntityFile = join(directory, rotatedEntityFileBaseName);
+    logger.info('Write file', rotatedEntityFile);
     //TODO: support raw binary data
     await fs.promises.writeFile(rotatedEntityFile, contents, 'utf8');
 
@@ -43,7 +46,8 @@ const rotateSingleEntity = async (
 export const rotateEntities = async (
     entity: 'secrets' | 'configs',
     spec: ComposeSpecification,
-    directory: string
+    directory: string,
+    logger: Logger
 ): Promise<ComposeSpecification> => {
     const {
         //secrets or configs
@@ -63,7 +67,7 @@ export const rotateEntities = async (
         const {
             rotatedEntityName: rotatedEntityName,
             rotatedEntityFile: rotatedEntityFile,
-        } = await rotateSingleEntity(name, config, directory);
+        } = await rotateSingleEntity(name, config, directory, logger);
         rotatedEntities[rotatedEntityName] = {
             ...config,
             file: rotatedEntityFile,
