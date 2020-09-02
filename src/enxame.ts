@@ -1,4 +1,5 @@
 export * from './compose-spec';
+export * from './helpers/mergeComposeConfigurations';
 
 declare module './compose-spec' {
     interface DefinitionsConfig {
