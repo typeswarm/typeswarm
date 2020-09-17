@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { inject, injectable } from 'inversify';
-import { basename, join } from 'path';
+import { basename, join, relative } from 'path';
 import { Logger } from 'tslog';
 import {
     ComposeSpecification,
@@ -46,8 +46,8 @@ export class EntitiesProcessor {
 
         const rotatedEntityName = `${name}_${hash}`;
         return {
-            rotatedEntityName: rotatedEntityName,
-            rotatedEntityFile: rotatedEntityFile,
+            rotatedEntityName,
+            rotatedEntityFile,
         };
     }
 
@@ -81,7 +81,7 @@ export class EntitiesProcessor {
             } = await this.processSingleEntity(name, config, directory);
             rotatedEntities[rotatedEntityName] = {
                 ...config,
-                file: rotatedEntityFile,
+                file: relative(directory, rotatedEntityFile),
             };
             delete rotatedEntities[rotatedEntityName].data;
             rotationMap[name] = rotatedEntityName;
