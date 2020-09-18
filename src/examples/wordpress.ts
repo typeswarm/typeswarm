@@ -1,4 +1,4 @@
-import { ComposeSpecification, DefinitionsService } from '../enxame';
+import { ComposeSpecification, DefinitionsService } from '../typeswarm';
 import { config as reverseProxyConfig } from './reverse-proxy-config';
 
 const volDBData = 'db_data';

@@ -1,14 +1,14 @@
 {
-    "name": "enxame",
+    "name": "typeswarm",
     "version": "0.0.10",
     "description": "",
     "keywords": [],
     "license": "ISC",
     "author": "",
-    "main": "./lib/enxame.js",
-    "types": "./lib/enxame.d.ts",
+    "main": "./lib/typeswarm.js",
+    "types": "./lib/typeswarm.d.ts",
     "bin": {
-        "enxame": "./lib/cli.js"
+        "typeswarm": "./lib/cli.js"
     },
     "files": [
         "lib"
@@ -17,7 +17,7 @@
         "build": "npm run build:types && npm run build:js",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
         "build:types": "tsc --emitDeclarationOnly",
-        "dev:deploy": "npm run build && node lib/cli deploy -x virtual-cluster -s test-enxame -c ./src/examples/wordpress.ts",
+        "dev:deploy": "npm run build && node lib/cli deploy -x virtual-cluster -s test-typeswarm -c ./src/examples/wordpress.ts",
         "dev:render": "npm run build && node lib/cli render -c ./src/examples/wordpress.ts -o ./src/examples/wordpress.compose",
         "prepublish": "npm run build",
         "type-check": "tsc --noEmit",

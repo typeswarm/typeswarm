@@ -41,7 +41,7 @@ export class CLIApplication {
         const targetDirBaseName =
             '.' +
             Math.floor(Math.random() * 1e9).toString(36) +
-            '.enxame-bundle';
+            '.compose';
         const configFileName = resolve(config);
         const configDir = dirname(configFileName);
         const targetDir = join(configDir, targetDirBaseName);
