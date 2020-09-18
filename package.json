@@ -11,7 +11,8 @@
         "typeswarm": "./lib/cli.js"
     },
     "files": [
-        "lib"
+        "lib",
+        "typeswarm-logo.svg"
     ],
     "scripts": {
         "build": "npm run build:types && npm run build:js",
