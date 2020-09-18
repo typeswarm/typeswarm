@@ -6,6 +6,7 @@ import fs from 'fs';
 import execa from 'execa';
 import yargs from 'yargs';
 import { register } from 'ts-node';
+import { config as dotenvConfig } from 'dotenv';
 
 @injectable()
 export class CLIApplication {
@@ -17,31 +18,39 @@ export class CLIApplication {
     async commandRender({
         config,
         output,
+        envFile,
     }: {
         config: string;
         output: string;
+        envFile?: string;
     }) {
         const configFileName = resolve(config);
         const targetDir = resolve(output);
 
         await fs.promises.mkdir(targetDir, { recursive: true });
+        if (envFile) {
+            dotenvConfig({
+                path: envFile,
+            });
+        }
         const { spec } = require(resolve(configFileName));
-        await this.composeBuilder.build(spec, targetDir);
+        const specValue = typeof spec === 'function' ? await spec() : spec;
+        await this.composeBuilder.build(specValue, targetDir);
     }
 
     async commandDeploy({
         config,
         stack,
         context,
+        envFile,
     }: {
         config: string;
         stack: string;
         context?: string;
+        envFile?: string;
     }) {
         const targetDirBaseName =
-            '.' +
-            Math.floor(Math.random() * 1e9).toString(36) +
-            '.compose';
+            '.' + Math.floor(Math.random() * 1e9).toString(36) + '.compose';
         const configFileName = resolve(config);
         const configDir = dirname(configFileName);
         const targetDir = join(configDir, targetDirBaseName);
@@ -49,6 +58,7 @@ export class CLIApplication {
         await this.commandRender({
             config: configFileName,
             output: targetDir,
+            envFile,
         });
 
         const args = [
@@ -87,6 +97,11 @@ export class CLIApplication {
                         demandOption: true,
                         string: true,
                     },
+                    envFile: {
+                        alias: 'e',
+                        demandOption: false,
+                        string: true,
+                    },
                     stack: {
                         alias: 's',
                         demandOption: true,
@@ -102,6 +117,11 @@ export class CLIApplication {
                     config: {
                         alias: 'c',
                         demandOption: true,
+                        string: true,
+                    },
+                    envFile: {
+                        alias: 'e',
+                        demandOption: false,
                         string: true,
                     },
                     output: {
