@@ -29,3 +29,26 @@ With TypeSwarm there is a new property allowed for configs and secrets - `data`.
 ### Packages
 
 Developers can create reusable packages of configurations and publish them in NPM. TypeSwarm is similar to Helm for Kubernetes, but instead of YAML it uses TypeScript, which makes the development process fun and easy.
+
+## Usage
+
+### Create a project
+
+First, generate a project using Yeoman:
+
+```bash
+npm i -g yo generator-typeswarm
+mkdir my-project
+cd my-project
+yo typeswarm
+```
+
+In your project's `package.json` there will be 4 commands:
+
+ - `npm run build:dev` - create Docker Compose file for `dev` environment
+ - `npm run build:prod` - create Docker Compose file for `prod` environment
+ - `npm run deploy:dev` - deploy `dev` environment to Docker Swarm cluster
+ - `npm run deploy:prod` - deploy `prod` environment to Docker Swarm cluster
+
+In `deploy.ts` you will find an example configuration adding a `whoami` service which is a simple demo web-server.
+You can add any other services, configs, secrets, volumes and networks in the same way as you used to do when you create a regular `docker-compose.yaml` file with the only difference that it should be a JS object.
