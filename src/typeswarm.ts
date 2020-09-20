@@ -1,5 +1,6 @@
 export * from './compose-spec';
 export * from './helpers/mergeComposeConfigurations';
+export * from './helpers/wrap';
 
 declare module './compose-spec' {
     interface DefinitionsConfig {

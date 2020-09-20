@@ -1,31 +1,35 @@
 import { ComposeSpecification } from '../compose-spec';
+import { StrictSpecification, parseSpecification } from '../normalize';
 
 export const mergeComposeConfigurations = (
     spec1: ComposeSpecification,
     spec2: ComposeSpecification
-): ComposeSpecification => {
+): StrictSpecification => {
+    const strictSpec1 = parseSpecification(spec1);
+    const strictSpec2 = parseSpecification(spec2);
+
     return {
-        ...spec1,
-        version: spec2.version || spec1.version,
+        ...strictSpec1,
+        version: strictSpec2.version || strictSpec1.version,
         configs: {
-            ...(spec1.configs ?? {}),
-            ...(spec2.configs ?? {}),
+            ...(strictSpec1.configs ?? {}),
+            ...(strictSpec2.configs ?? {}),
         },
         networks: {
-            ...(spec1.networks ?? {}),
-            ...(spec2.networks ?? {}),
+            ...(strictSpec1.networks ?? {}),
+            ...(strictSpec2.networks ?? {}),
         },
         secrets: {
-            ...(spec1.secrets ?? {}),
-            ...(spec2.secrets ?? {}),
+            ...(strictSpec1.secrets ?? {}),
+            ...(strictSpec2.secrets ?? {}),
         },
         services: {
-            ...(spec1.services ?? {}),
-            ...(spec2.services ?? {}),
+            ...(strictSpec1.services ?? {}),
+            ...(strictSpec2.services ?? {}),
         },
         volumes: {
-            ...(spec1.volumes ?? {}),
-            ...(spec2.volumes ?? {}),
+            ...(strictSpec1.volumes ?? {}),
+            ...(strictSpec2.volumes ?? {}),
         },
     };
 };
