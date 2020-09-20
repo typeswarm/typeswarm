@@ -93,4 +93,36 @@ describe('parsePorts', () => {
             'Too big ports range 500-7000'
         );
     });
+
+    it('should forward long-syntax ports', () => {
+        expect(
+            parsePorts([
+                {
+                    target: 80,
+                    protocol: 'udp',
+                },
+                {
+                    target: 81,
+                    protocol: 'udp',
+                },
+                {
+                    target: 82,
+                    protocol: 'udp',
+                },
+            ])
+        ).toEqual([
+            {
+                target: 80,
+                protocol: 'udp',
+            },
+            {
+                target: 81,
+                protocol: 'udp',
+            },
+            {
+                target: 82,
+                protocol: 'udp',
+            },
+        ]);
+    });
 });

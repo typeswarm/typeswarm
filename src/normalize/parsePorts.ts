@@ -28,7 +28,7 @@ function parsePort(
     if (typeof port === 'string') {
         return parsePortStr(port);
     }
-    return [];
+    return [port];
 }
 
 function parsePortStr(mappingWithProto: string): StrictPortMapping[] {
