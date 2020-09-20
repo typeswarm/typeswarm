@@ -6,6 +6,7 @@ import YAML from 'yaml';
 import { ComposeSpecification } from './compose-spec';
 import { Types } from './di';
 import { EntitiesProcessor } from './EntitiesProcessor';
+import { parseSpecification } from './normalize';
 
 export const COMPOSE_FILE_NAME = 'docker-compose.yaml';
 
@@ -20,9 +21,10 @@ export class ComposeBuilder {
     ) {}
 
     async build(spec: ComposeSpecification, directory: string) {
+        const strictSpec = parseSpecification(spec)
         const specWithRotatedConfigs = await this.entitiesProcessor.processEntities(
             'configs',
-            spec,
+            strictSpec,
             directory
         );
         const specWithRotatedSecrets = await this.entitiesProcessor.processEntities(

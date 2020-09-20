@@ -3,13 +3,12 @@ import { inject, injectable } from 'inversify';
 import { basename, join, relative } from 'path';
 import { Logger } from 'tslog';
 import {
-    ComposeSpecification,
     DefinitionsConfig,
     DefinitionsSecret,
     PropertiesConfigs,
-    PropertiesServices,
 } from './compose-spec';
 import { Types } from './di';
+import { StrictServicesDict, StrictSpecification } from './normalize';
 import { getHash } from './utils';
 
 @injectable()
@@ -53,16 +52,16 @@ export class EntitiesProcessor {
 
     async processEntities(
         entity: 'secrets' | 'configs',
-        spec: ComposeSpecification,
+        spec: StrictSpecification,
         directory: string
-    ): Promise<ComposeSpecification> {
+    ): Promise<StrictSpecification> {
         const {
             //secrets or configs
             [entity]: entitiesMap = {},
             services = {},
         } = spec;
         const rotatedEntities: PropertiesConfigs = {};
-        const rotatedServices: PropertiesServices = {};
+        const rotatedServices: StrictServicesDict = {};
 
         const rotationMap: { [configName: string]: string } = {};
 
