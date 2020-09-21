@@ -5,22 +5,28 @@ import {
     StrictSpecification,
     parseSpecification,
 } from '../normalize';
+import { flattenDeep, RecursiveArray } from 'lodash';
+
+export type Plugin<T> = (input: T) => T;
 
 export interface Wrapped<T> {
-    with(plugin: (input: T) => T): Wrapped<T>;
+    with(...plugins: RecursiveArray<Plugin<T>>): Wrapped<T>;
     value(): T;
 }
 
 export function wrap<T>(input: T): Wrapped<T> {
-    const plugins: ((input: T) => T)[] = [];
+    const registeredPlugins: Plugin<T>[] = [];
 
     return {
-        with(plugin) {
-            plugins.push(plugin);
+        with(...plugins) {
+            registeredPlugins.push(...flattenDeep(plugins));
             return this;
         },
         value() {
-            return plugins.reduce((input, plugin) => plugin(input), input);
+            return registeredPlugins.reduce(
+                (input, plugin) => plugin(input),
+                input
+            );
         },
     };
 }
