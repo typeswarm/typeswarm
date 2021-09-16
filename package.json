@@ -21,7 +21,7 @@
     "build:types": "tsc --emitDeclarationOnly",
     "dev:deploy": "npm run build && node lib/cli deploy -x virtual-cluster -s test-typeswarm -c ./src/examples/wordpress.ts",
     "dev:render": "npm run build && node lib/cli render -c ./src/examples/wordpress.ts -o ./src/examples/wordpress.compose",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
     "test": "jest"
@@ -30,6 +30,7 @@
     "@types/lodash": "^4.14.161",
     "dotenv": "^8.2.0",
     "execa": "^4.0.3",
+    "immer": "^9.0.6",
     "inversify": "^5.0.1",
     "lodash": "^4.17.20",
     "md5": "^2.3.0",
