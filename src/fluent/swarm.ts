@@ -13,3 +13,10 @@ export const swarm = {
     Volume: VolumeDefinitionFactory,
     Cluster: ClusterFactory,
 };
+
+export * from './cluster';
+export * from './image';
+export * from './port';
+export * from './service';
+export * from './service-volume';
+export * from './volume-definition';
