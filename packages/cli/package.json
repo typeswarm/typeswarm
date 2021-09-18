@@ -19,12 +19,13 @@
         "build": "npm run build:types && npm run build:js",
         "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
         "build:types": "tsc --emitDeclarationOnly",
+        "test": "jest",
         "type-check": "tsc --noEmit",
-        "type-check:watch": "npm run type-check -- --watch",
-        "test": "jest"
+        "type-check:watch": "npm run type-check -- --watch"
     },
     "dependencies": {
         "@types/lodash": "^4.14.161",
+        "@typeswarm/core": "0.1.0",
         "dotenv": "^8.2.0",
         "execa": "^4.0.3",
         "immer": "^9.0.6",
