@@ -1,0 +1,9 @@
+{
+  "mode": "pre",
+  "tag": "fluent",
+  "initialVersions": {
+    "@typeswarm/cli": "0.1.0",
+    "@typeswarm/core": "0.1.0"
+  },
+  "changesets": []
+}
