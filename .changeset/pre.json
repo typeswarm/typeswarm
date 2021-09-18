@@ -6,6 +6,7 @@
     "@typeswarm/core": "0.1.0"
   },
   "changesets": [
-    "sharp-wombats-give"
+    "sharp-wombats-give",
+    "small-crews-pump"
   ]
 }
