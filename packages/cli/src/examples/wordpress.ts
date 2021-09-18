@@ -1,4 +1,4 @@
-import { ComposeSpecification, DefinitionsService } from '../typeswarm';
+import { ComposeSpecification, DefinitionsService } from '@typeswarm/core';
 import { config as reverseProxyConfig } from './reverse-proxy-config';
 
 const volDBData = 'db_data';
