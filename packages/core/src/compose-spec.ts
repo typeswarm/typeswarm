@@ -12,7 +12,7 @@ export type ListOrDict =
        * This interface was referenced by `undefined`'s JSON-Schema definition
        * via the `patternProperty` ".+".
        */
-      [k: string]: string | number | null;
+      [k: string]: string | number | boolean | null;
     }
   | string[];
 export type DefinitionsGenericResources = {
@@ -31,8 +31,20 @@ export type DefinitionsGenericResources = {
    */
   [k: string]: unknown;
 }[];
-export type DefinitionsDeployment1 = null;
 export type ListOfStrings = string[];
+export type DefinitionsDevices = {
+  capabilities?: ListOfStrings;
+  count?: string | number;
+  device_ids?: ListOfStrings;
+  driver?: string;
+  options?: ListOrDict;
+  /**
+   * This interface was referenced by `undefined`'s JSON-Schema definition
+   * via the `patternProperty` "^x-".
+   */
+  [k: string]: unknown;
+}[];
+export type DefinitionsDeployment1 = null;
 export type StringOrList = string | ListOfStrings;
 /**
  * This interface was referenced by `PropertiesNetworks`'s JSON-Schema definition
@@ -82,7 +94,7 @@ export interface DefinitionsService {
         dockerfile?: string;
         args?: ListOrDict;
         labels?: ListOrDict;
-        cache_from?: ListOfStrings;
+        cache_from?: string[];
         network?: string;
         target?: string;
         shm_size?: number | string;
@@ -129,7 +141,7 @@ export interface DefinitionsService {
   cpu_period?: number | string;
   cpu_rt_period?: number | string;
   cpu_rt_runtime?: number | string;
-  cpus?: number;
+  cpus?: number | string;
   cpuset?: string;
   credential_spec?: {
     config?: string;
@@ -149,7 +161,7 @@ export interface DefinitionsService {
          * via the `patternProperty` "^[a-zA-Z0-9._-]+$".
          */
         [k: string]: {
-          condition: "service_started" | "service_healthy";
+          condition: "service_started" | "service_healthy" | "service_completed_successfully";
         };
       };
   device_cgroup_rules?: ListOfStrings;
@@ -230,6 +242,7 @@ export interface DefinitionsService {
     | string
     | {
         mode?: string;
+        host_ip?: string;
         target?: number;
         published?: number;
         protocol?: string;
@@ -241,7 +254,8 @@ export interface DefinitionsService {
       }
   )[];
   privileged?: boolean;
-  pull_policy?: "always" | "never" | "if_not_present";
+  profiles?: ListOfStrings;
+  pull_policy?: "always" | "never" | "if_not_present" | "build" | "missing";
   read_only?: boolean;
   restart?: string;
   runtime?: string;
@@ -267,6 +281,9 @@ export interface DefinitionsService {
   stdin_open?: boolean;
   stop_grace_period?: string;
   stop_signal?: string;
+  storage_opt?: {
+    [k: string]: unknown;
+  };
   tmpfs?: StringOrList;
   tty?: boolean;
   ulimits?: {
@@ -298,6 +315,7 @@ export interface DefinitionsService {
         consistency?: string;
         bind?: {
           propagation?: string;
+          create_host_path?: boolean;
           /**
            * This interface was referenced by `undefined`'s JSON-Schema definition
            * via the `patternProperty` "^x-".
@@ -368,7 +386,7 @@ export interface DefinitionsDeployment {
   };
   resources?: {
     limits?: {
-      cpus?: string;
+      cpus?: number | string;
       memory?: string;
       /**
        * This interface was referenced by `undefined`'s JSON-Schema definition
@@ -377,9 +395,10 @@ export interface DefinitionsDeployment {
       [k: string]: unknown;
     };
     reservations?: {
-      cpus?: string;
+      cpus?: number | string;
       memory?: string;
       generic_resources?: DefinitionsGenericResources;
+      devices?: DefinitionsDevices;
       /**
        * This interface was referenced by `undefined`'s JSON-Schema definition
        * via the `patternProperty` "^x-".
@@ -473,6 +492,10 @@ export interface DefinitionsNetwork {
          */
         [k: string]: string;
       };
+      /**
+       * This interface was referenced by `undefined`'s JSON-Schema definition
+       * via the `patternProperty` "^x-".
+       */
       [k: string]: unknown;
     }[];
     options?: {
@@ -499,6 +522,7 @@ export interface DefinitionsNetwork {
         [k: string]: unknown;
       };
   internal?: boolean;
+  enable_ipv6?: boolean;
   attachable?: boolean;
   labels?: ListOrDict;
   /**

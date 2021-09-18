@@ -21,7 +21,7 @@ export interface StrictPortMapping {
 }
 
 export interface Dictionary {
-    [k: string]: string | number | null;
+    [k: string]: string | number | boolean | null;
 }
 
 export interface StrictConfig {

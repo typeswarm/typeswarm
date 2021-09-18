@@ -1,12 +1,12 @@
+import { ComposeSpecification } from '@typeswarm/core';
+import { parseSpecification } from '@typeswarm/core/lib/normalize';
 import fs from 'fs';
 import { inject, injectable } from 'inversify';
 import { join } from 'path';
 import { Logger } from 'tslog';
 import YAML from 'yaml';
-import { ComposeSpecification } from './compose-spec';
 import { Types } from './di';
 import { EntitiesProcessor } from './EntitiesProcessor';
-import { parseSpecification } from './normalize';
 
 export const COMPOSE_FILE_NAME = 'docker-compose.yaml';
 
@@ -21,7 +21,7 @@ export class ComposeBuilder {
     ) {}
 
     async build(spec: ComposeSpecification, directory: string) {
-        const strictSpec = parseSpecification(spec)
+        const strictSpec = parseSpecification(spec);
         const specWithRotatedConfigs = await this.entitiesProcessor.processEntities(
             'configs',
             strictSpec,

@@ -1,15 +1,18 @@
-import fs from 'fs';
-import { inject, injectable } from 'inversify';
-import { basename, join, relative } from 'path';
-import { Logger } from 'tslog';
 import {
     DefinitionsConfig,
     DefinitionsSecret,
     PropertiesConfigs,
-} from './compose-spec';
+} from '@typeswarm/core';
+import {
+    StrictServicesDict,
+    StrictSpecification,
+} from '@typeswarm/core/lib/normalize';
+import { getHash } from '@typeswarm/core/lib/utils';
+import fs from 'fs';
+import { inject, injectable } from 'inversify';
+import { basename, join, relative } from 'path';
+import { Logger } from 'tslog';
 import { Types } from './di';
-import { StrictServicesDict, StrictSpecification } from './normalize';
-import { getHash } from './utils';
 
 @injectable()
 export class EntitiesProcessor {
