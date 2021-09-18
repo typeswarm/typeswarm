@@ -1,0 +1,148 @@
+version: 2.1
+
+x-job-setup: &job-setup
+  docker:
+    - image: cimg/node:15.1
+
+x-npm-auth: &npm-auth
+  run:
+    name: Authenticate with NPM registry
+    command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ${HOME}/.npmrc
+
+x-git-user: &git-user
+  run:
+    name: Git user
+    command: |
+      git config user.email "CircleCI"
+      git config user.name "CircleCI"
+x-npm-install: &npm-install
+  node/install-packages:
+    pkg-manager: yarn
+
+x-yarn-workspaces-info: &yarn-workspaces-info
+  run:
+    name: Show info about workspaces
+    command: yarn workspaces info
+
+x-git-push: &git-push
+  run:
+    name: Commit and push changes to git repository
+    command: |
+      if [[ -n $(git status --porcelain) ]]; then
+        git add .
+        git commit -m 'chore(changesets): [ci skip] bump packages versions'
+        git push -u origin ${CIRCLE_BRANCH} --follow-tags
+      else
+        echo "No changes in GIT, not pushing"
+      fi
+
+x-fail-on-pre: &fail-on-pre
+  run:
+    name: Ensure there is no pre.json
+    command: |
+      if [[ -f ".changeset/pre.json" ]]; then
+        echo "pre.json may only exist in branches starting with pre-release/"
+        exit 1
+      fi
+
+x-fail-on-missing-pre: &fail-on-missing-pre
+  run:
+    name: Ensure there is pre.json
+    command: |
+      if [[ ! -f ".changeset/pre.json" ]]; then
+        echo "pre.json must exist in branches starting with pre-release/"
+        exit 1
+      fi
+
+orbs:
+  node: circleci/node@4.1
+
+jobs:
+  test:
+    <<: *job-setup
+    steps:
+      - checkout
+      - *npm-auth
+      - *npm-install
+      - *yarn-workspaces-info
+      - run:
+          name: Building changed packages and its dependencies
+          command: changeset-releaser build
+      - run:
+          name: Testing changed packages and its dependents
+          command: changeset-releaser test
+
+  release:
+    <<: *job-setup
+    steps:
+      - checkout
+      - *git-user
+      - *npm-auth
+      - *fail-on-pre
+      - *npm-install
+      - *yarn-workspaces-info
+      - run:
+          name: Check if changesets are present
+          command: yarn changeset status
+      - run:
+          name: Upgrade versions
+          command: yarn changeset version
+      - run:
+          name: Publish packages
+          command: yarn changeset publish
+      - *git-push
+
+  pre-release:
+    <<: *job-setup
+    steps:
+      - checkout
+      - *git-user
+      - *npm-auth
+      - *fail-on-missing-pre
+      - *npm-install
+      - *yarn-workspaces-info
+      - run:
+          name: Check if changesets are present
+          command: yarn changeset status
+      - run:
+          name: Upgrade versions
+          command: yarn changeset version
+      - run:
+          name: Publish packages
+          command: yarn changeset publish
+      - *git-push
+
+workflows:
+  build-test-and-deploy:
+    jobs:
+      - test
+      - approve-release:
+          requires:
+            - test
+          type: approval
+          filters:
+            branches:
+              only:
+                - master
+      - approve-pre-release:
+          requires:
+            - test
+          type: approval
+          filters:
+            branches:
+              only:
+                - /pre-release/.*/
+      - release:
+          requires:
+            - approve-release
+          filters:
+            branches:
+              only:
+                - master
+      - pre-release:
+          requires:
+            - approve-pre-release
+          filters:
+            branches:
+              only:
+                - /pre-release/.*/

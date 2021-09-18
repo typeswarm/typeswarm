@@ -1,0 +1,60 @@
+{
+  "name": "@typeswarm/cli",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [],
+  "repository": "typeswarm/typeswarm",
+  "license": "ISC",
+  "author": "",
+  "main": "./lib/typeswarm.js",
+  "types": "./lib/typeswarm.d.ts",
+  "bin": {
+    "typeswarm": "./lib/cli.js"
+  },
+  "files": [
+    "lib",
+    "typeswarm-logo.svg"
+  ],
+  "scripts": {
+    "build": "npm run build:types && npm run build:js",
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "build:types": "tsc --emitDeclarationOnly",
+    "dev:deploy": "npm run build && node lib/cli deploy -x virtual-cluster -s test-typeswarm -c ./src/examples/wordpress.ts",
+    "dev:render": "npm run build && node lib/cli render -c ./src/examples/wordpress.ts -o ./src/examples/wordpress.compose",
+    "prepublishOnly": "npm run build",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.161",
+    "dotenv": "^8.2.0",
+    "execa": "^4.0.3",
+    "immer": "^9.0.6",
+    "inversify": "^5.0.1",
+    "lodash": "^4.17.20",
+    "md5": "^2.3.0",
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^9.0.0",
+    "tslog": "^2.7.1",
+    "typescript": "^4.4.2",
+    "yaml": "^1.10.0",
+    "yargs": "^15.4.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/jest": "^26.0.14",
+    "@types/md5": "^2.2.0",
+    "@types/node": "^14.6.2",
+    "@types/yargs": "^15.0.5",
+    "axios": "^0.20.0",
+    "babel-plugin-transform-typescript-metadata": "^0.3.0",
+    "jest": "^26.4.2",
+    "json-schema-to-typescript": "^9.1.1"
+  }
+}
