@@ -83,13 +83,13 @@ jobs:
       - *yarn-workspaces-info
       - run:
           name: Check if changesets are present
-          command: yarn changeset status
+          command: npx changeset status
       - run:
           name: Upgrade versions
-          command: yarn changeset version
+          command: npx changeset version
       - run:
           name: Publish packages
-          command: yarn changeset publish
+          command: npx changeset publish
       - *git-push
 
   pre-release:
