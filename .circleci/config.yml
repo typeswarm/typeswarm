@@ -108,6 +108,9 @@ jobs:
           name: Upgrade versions
           command: npx changeset version
       - run:
+          name: Building changed packages and its dependencies
+          command: yarn changeset-releaser build
+      - run:
           name: Publish packages
           command: npx changeset publish
       - *git-push
