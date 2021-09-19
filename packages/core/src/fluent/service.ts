@@ -1,6 +1,5 @@
-import produce from 'immer';
 import { StrictService } from '../normalize';
-import { _makeWhen, _makeWith } from './common';
+import { _makeProduce, _makeSet, _makeWhen, _makeWith } from './common';
 import { FluentImage } from './image';
 import { FluentPort } from './port';
 import { FluentServiceVolume } from './service-volume';
@@ -14,35 +13,26 @@ export class FluentService {
     constructor(public readonly data: ServiceRegistration) {}
     with = _makeWith<FluentService>(this);
     when = _makeWhen<FluentService>(this);
+    private set = _makeSet(FluentService);
+    private produce = _makeProduce(FluentService);
 
     image = (image: string | FluentImage) =>
-        new FluentService({
-            ...this.data,
-            service: {
-                ...this.data.service,
-                image: `${image}`,
-            },
-        });
+        this.with(this.set('service.image', `${image}`));
 
     env = (key: string, value: string | number | null) =>
-        new FluentService(
-            produce(this.data, ({ service }) => {
-                service.environment = service.environment ?? {};
-                service.environment[key] = value;
-            })
-        );
+        this.with(this.set(['service', 'environment', key], value));
 
     port = (port: FluentPort) =>
-        new FluentService(
-            produce(this.data, ({ service }) => {
+        this.with(
+            this.produce(({ service }) => {
                 service.ports = service.ports ?? [];
                 service.ports.push(port.data);
             })
         );
 
     volume = (volume: FluentServiceVolume) =>
-        new FluentService(
-            produce(this.data, ({ service }) => {
+        this.with(
+            this.produce(({ service }) => {
                 service.volumes = service.volumes ?? [];
                 service.volumes.push(volume.data);
             })

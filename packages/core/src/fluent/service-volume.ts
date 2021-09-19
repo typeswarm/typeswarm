@@ -1,41 +1,32 @@
 import { ok } from 'assert';
-import produce from 'immer';
-import { set } from 'lodash';
 import { StrictVolume } from '../normalize';
-import { _makeWhen, _makeWith } from './common';
+import { _makeSet, _makeWhen, _makeWith } from './common';
 import { FluentVolumeDefinition } from './volume-definition';
 
 export class FluentServiceVolume {
     constructor(public readonly data: StrictVolume) {}
     with = _makeWith<FluentServiceVolume>(this);
     when = _makeWhen<FluentServiceVolume>(this);
+    private set = _makeSet(FluentServiceVolume);
 
-    bind = () => new FluentServiceVolume({ ...this.data, type: 'bind' });
-    volume = () => new FluentServiceVolume({ ...this.data, type: 'volume' });
+    bind = () => this.with(this.set('type', 'bind'));
+
+    volume = () => this.with(this.set('type', 'volume'));
+
     source = (source: string | FluentVolumeDefinition) => {
         const src = typeof source === 'string' ? source : source.data.name;
         ok(src, 'Source volume name is not set');
-        return new FluentServiceVolume({ ...this.data, source: src });
+        return this.with(this.set('source', src));
     };
-    readOnly = () => new FluentServiceVolume({ ...this.data, readOnly: true });
-    noCopy = () =>
-        new FluentServiceVolume(
-            produce(this.data, (data) => {
-                set(data, 'volume.nocopy', true);
-            })
-        );
+
+    readOnly = () => this.with(this.set('readOnly', true));
+
+    noCopy = () => this.with(this.set('volume.nocopy', true));
+
     propagation = (propagation: string) =>
-        new FluentServiceVolume(
-            produce(this.data, (data) => {
-                set(data, 'bind.propagation', propagation);
-            })
-        );
-    size = (size: number) =>
-        new FluentServiceVolume(
-            produce(this.data, (data) => {
-                set(data, 'tmpfs.size', size);
-            })
-        );
+        this.with(this.set('bind.propagation', propagation));
+
+    size = (size: number) => this.with(this.set('tmpfs.size', size));
 }
 
 export const ServiceVolumeFactory = (target: string) =>

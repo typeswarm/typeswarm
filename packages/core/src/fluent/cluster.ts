@@ -1,8 +1,8 @@
 import { ok } from 'assert';
-import produce from 'immer';
-import { set } from 'lodash';
 import { StrictSpecification } from '../normalize';
-import { _makeWhen, _makeWith } from './common';
+import { _makeSet, _makeWhen, _makeWith } from './common';
+import { FluentConfigDefinition } from './config-definition';
+import { FluentSecretDefinition } from './secret-definition';
 import { FluentService } from './service';
 import { FluentVolumeDefinition } from './volume-definition';
 
@@ -10,27 +10,32 @@ export class FluentCluster {
     constructor(public readonly data: StrictSpecification) {}
     with = _makeWith<FluentCluster>(this);
     when = _makeWhen<FluentCluster>(this);
+    private set = _makeSet(FluentCluster);
 
-    version = (version: string) => new FluentCluster({ ...this.data, version });
+    version = (version: string) => this.with(this.set('version', version));
 
     service = (service: FluentService) => {
         const name = service.data.name;
         ok(name, 'Service name is required');
-        return new FluentCluster(
-            produce(this.data, (data) => {
-                set(data, ['services', name], service.data.service);
-            })
-        );
+        return this.with(this.set(['services', name], service.data.service));
     };
 
     volume = (volume: FluentVolumeDefinition) => {
         const name = volume.data.name;
         ok(name, 'Volume name is required');
-        return new FluentCluster(
-            produce(this.data, (data) => {
-                set(data, ['volumes', name], volume.data.volume);
-            })
-        );
+        return this.with(this.set(['volumes', name], volume.data.volume));
+    };
+
+    config = (config: FluentConfigDefinition) => {
+        const name = config.data.name;
+        ok(name, 'Config name is required');
+        return this.with(this.set(['configs', name], config.data.config));
+    };
+
+    secret = (secret: FluentSecretDefinition) => {
+        const name = secret.data.name;
+        ok(name, 'Secret name is required');
+        return this.with(this.set(['secrets', name], secret.data.secret));
     };
 }
 

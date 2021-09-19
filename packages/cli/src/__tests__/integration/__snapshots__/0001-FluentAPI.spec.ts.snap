@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration-0001 Fluent API should process fluent config 1`] = `
+Object {
+  "services": Object {
+    "cache": Object {
+      "image": "redis:6.0",
+      "volumes": Array [
+        Object {
+          "source": "redis-data",
+          "target": "/data",
+          "type": "volume",
+        },
+      ],
+    },
+    "database": Object {
+      "image": "mariadb:10",
+      "volumes": Array [
+        Object {
+          "source": "mariadb-data",
+          "target": "/data",
+          "type": "volume",
+        },
+      ],
+    },
+    "website": Object {
+      "environment": Object {
+        "CACHE": "redis:cache",
+        "DATABASE_HOST": "database",
+      },
+      "image": "wordpress:7.1",
+    },
+  },
+  "version": "3.7",
+  "volumes": Object {
+    "mariadb-data": null,
+  },
+}
+`;

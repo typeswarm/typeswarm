@@ -1,7 +1,5 @@
-import produce from 'immer';
-import { set } from 'lodash';
 import { DefinitionsVolume } from '../compose-spec';
-import { _makeWhen, _makeWith } from './common';
+import { _makeSet, _makeWhen, _makeWith } from './common';
 
 export interface VolumeRegistration {
     name?: string;
@@ -12,20 +10,12 @@ export class FluentVolumeDefinition {
     constructor(public readonly data: VolumeRegistration) {}
     with = _makeWith<FluentVolumeDefinition>(this);
     when = _makeWhen<FluentVolumeDefinition>(this);
+    private set = _makeSet(FluentVolumeDefinition);
 
-    driver = (driver: string) =>
-        new FluentVolumeDefinition(
-            produce(this.data, (data) => {
-                set(data, 'volume.driver', driver);
-            })
-        );
+    driver = (driver: string) => this.with(this.set('volume.driver', driver));
 
     driverOpts = (driverOpts: Record<string, string | number>) =>
-        new FluentVolumeDefinition(
-            produce(this.data, (data) => {
-                set(data, 'volume.driver_opts', driverOpts);
-            })
-        );
+        this.with(this.set('volume.driver_opts', driverOpts));
 }
 
 export const VolumeDefinitionFactory = (name?: string) =>

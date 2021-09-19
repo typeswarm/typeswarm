@@ -1,9 +1,9 @@
-import { StrictService } from "@typeswarm/core/lib/normalize";
-import { Container } from "inversify";
-import { Logger } from "tslog";
-import { Types } from "../di";
-import { EntitiesProcessor } from "../EntitiesProcessor";
-import { FileStorageImpl_Mock, IFileStorage } from "../FileStorage";
+import { StrictService } from '@typeswarm/core/lib/normalize';
+import { Container } from 'inversify';
+import { Logger } from 'tslog';
+import { Types } from '../di';
+import { EntitiesProcessor } from '../EntitiesProcessor';
+import { FileStorageImpl_Mock, IFileStorage } from '../FileStorage';
 
 function createContainer() {
     const di = new Container();
@@ -12,13 +12,13 @@ function createContainer() {
         .to(FileStorageImpl_Mock)
         .inSingletonScope();
     di.bind<Logger>(Types.Logger).toConstantValue(
-        new Logger({ displayFilePath: "hidden" })
+        new Logger({ displayFilePath: 'hidden' })
     );
     return di;
 }
 
-describe("EntitiesProcessor", () => {
-    it("should process both configs and secrets", async () => {
+describe('EntitiesProcessor', () => {
+    it('should process both configs and secrets', async () => {
         const di = createContainer();
 
         const entitiesProcessor = di.get<EntitiesProcessor>(
@@ -26,43 +26,43 @@ describe("EntitiesProcessor", () => {
         );
 
         const specWithRotatedConfigs = await entitiesProcessor.processEntities(
-            "configs",
+            'configs',
             {
                 services: {
                     website: {
-                        image: "my-image:latest",
+                        image: 'my-image:latest',
                         configs: [
                             {
-                                source: "website-config.yaml",
-                                target: "/etc/app/config.yaml"
-                            }
+                                source: 'website-config.yaml',
+                                target: '/etc/app/config.yaml',
+                            },
                         ],
                         secrets: [
                             {
-                                source: "website-credentials.yaml",
-                                target: "/etc/app/credentials.yaml"
-                            }
-                        ]
-                    } as StrictService
+                                source: 'website-credentials.yaml',
+                                target: '/etc/app/credentials.yaml',
+                            },
+                        ],
+                    } as StrictService,
                 },
                 configs: {
-                    "website-config.yaml": {
-                        data: "hello: world"
-                    }
+                    'website-config.yaml': {
+                        data: 'hello: world',
+                    },
                 },
                 secrets: {
-                    "website-credentials.yaml": {
-                        data: 'apiKey: "1234567890"'
-                    }
-                }
+                    'website-credentials.yaml': {
+                        data: 'apiKey: "1234567890"',
+                    },
+                },
             },
-            "build"
+            'build'
         );
 
         const specWithRotatedSecrets = await entitiesProcessor.processEntities(
-            "secrets",
+            'secrets',
             specWithRotatedConfigs,
-            "build"
+            'build'
         );
 
         expect(specWithRotatedSecrets).toMatchSnapshot();

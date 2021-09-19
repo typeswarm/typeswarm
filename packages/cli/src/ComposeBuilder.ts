@@ -22,16 +22,18 @@ export class ComposeBuilder {
 
     async build(spec: ComposeSpecification, directory: string) {
         const strictSpec = parseSpecification(spec);
-        const specWithRotatedConfigs = await this.entitiesProcessor.processEntities(
-            'configs',
-            strictSpec,
-            directory
-        );
-        const specWithRotatedSecrets = await this.entitiesProcessor.processEntities(
-            'secrets',
-            specWithRotatedConfigs,
-            directory
-        );
+        const specWithRotatedConfigs =
+            await this.entitiesProcessor.processEntities(
+                'configs',
+                strictSpec,
+                directory
+            );
+        const specWithRotatedSecrets =
+            await this.entitiesProcessor.processEntities(
+                'secrets',
+                specWithRotatedConfigs,
+                directory
+            );
         const composeFile = join(directory, COMPOSE_FILE_NAME);
         const specYaml = YAML.stringify(
             JSON.parse(JSON.stringify(specWithRotatedSecrets))
