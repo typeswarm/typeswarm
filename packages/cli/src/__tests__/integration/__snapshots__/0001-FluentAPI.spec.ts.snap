@@ -2,6 +2,19 @@
 
 exports[`Integration-0001 Fluent API should process fluent config 1`] = `
 Object {
+  "configs": Object {
+    "website-config": Object {
+      "data": "{
+  \\"hello\\": \\"world\\"
+}",
+    },
+  },
+  "secrets": Object {
+    "website-secret": Object {
+      "data": "password: secret
+",
+    },
+  },
   "services": Object {
     "cache": Object {
       "image": "redis:6.0",
@@ -24,11 +37,23 @@ Object {
       ],
     },
     "website": Object {
+      "configs": Array [
+        Object {
+          "source": "website-config",
+          "target": "/etc/conf.json",
+        },
+      ],
       "environment": Object {
         "CACHE": "redis:cache",
         "DATABASE_HOST": "database",
       },
       "image": "wordpress:7.1",
+      "secrets": Array [
+        Object {
+          "source": "website-secret",
+          "target": "/etc/password.yaml",
+        },
+      ],
     },
   },
   "version": "3.7",

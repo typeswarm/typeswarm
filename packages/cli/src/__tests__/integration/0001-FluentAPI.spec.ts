@@ -6,6 +6,9 @@ import {
     Cluster,
     Volume,
     ServiceVolume,
+    Config,
+    Secret,
+    ServiceConfig
 } from '@typeswarm/core';
 import { Types } from '../../di';
 import { EntitiesProcessor } from '../../EntitiesProcessor';
@@ -28,6 +31,11 @@ describe('Integration-0001 Fluent API', () => {
         const databaseVolume = Volume('mariadb-data');
         const cacheVolume = Volume('redis-data');
 
+        const websiteConfig = Config('website-config').json({ hello: 'world' });
+        const websiteSecret = Secret('website-secret').yaml({
+            password: 'secret'
+        });
+
         const srvCache = Service('cache')
             .image(Image('redis').tag('6.0'))
             .volume(ServiceVolume('/data').source(cacheVolume));
@@ -39,13 +47,17 @@ describe('Integration-0001 Fluent API', () => {
         const srvWebsite = Service('website')
             .image(Image('wordpress').tag('7.1'))
             .env('DATABASE_HOST', `${srvDb.data.name}`)
-            .env('CACHE', `redis:${srvCache.data.name}`);
+            .env('CACHE', `redis:${srvCache.data.name}`)
+            .config(ServiceConfig('/etc/conf.json').source(websiteConfig))
+            .secret(ServiceConfig('/etc/password.yaml').source(websiteSecret));
 
         const spec = Cluster('3.7')
             .service(srvCache)
             .service(srvWebsite)
             .service(srvDb)
-            .volume(databaseVolume);
+            .volume(databaseVolume)
+            .secret(websiteSecret)
+            .config(websiteConfig);
         expect(spec.data).toMatchSnapshot();
     });
 });

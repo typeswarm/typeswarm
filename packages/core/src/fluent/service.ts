@@ -2,6 +2,8 @@ import { StrictService } from '../normalize';
 import { _makeProduce, _makeSet, _makeWhen, _makeWith } from './common';
 import { FluentImage } from './image';
 import { FluentPort } from './port';
+import { FluentSecretDefinition } from './secret-definition';
+import { FluentServiceConfig } from './service-config';
 import { FluentServiceVolume } from './service-volume';
 
 export interface ServiceRegistration {
@@ -35,6 +37,22 @@ export class FluentService {
             this.produce(({ service }) => {
                 service.volumes = service.volumes ?? [];
                 service.volumes.push(volume.data);
+            })
+        );
+
+    secret = (secret: FluentServiceConfig) =>
+        this.with(
+            this.produce(({ service }) => {
+                service.secrets = service.secrets ?? [];
+                service.secrets.push(secret.data);
+            })
+        );
+
+    config = (config: FluentServiceConfig) =>
+        this.with(
+            this.produce(({ service }) => {
+                service.configs = service.configs ?? [];
+                service.configs.push(config.data);
             })
         );
 }
