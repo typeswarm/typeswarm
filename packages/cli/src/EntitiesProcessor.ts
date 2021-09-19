@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import {
     DefinitionsConfig,
     DefinitionsSecret,
@@ -8,17 +10,20 @@ import {
     StrictSpecification,
 } from '@typeswarm/core/lib/normalize';
 import { getHash } from '@typeswarm/core/lib/utils';
-import fs from 'fs';
+
 import { inject, injectable } from 'inversify';
 import { basename, join, relative } from 'path';
 import { Logger } from 'tslog';
 import { Types } from './di';
+import { IFileStorage } from './FileStorage';
 
 @injectable()
 export class EntitiesProcessor {
     constructor(
         @inject(Types.Logger)
-        private logger: Logger
+        private logger: Logger,
+        @inject(Types.IFileStorage)
+        private fileStorage: IFileStorage
     ) {}
 
     private async processSingleEntity(
@@ -34,7 +39,7 @@ export class EntitiesProcessor {
         //TODO: support raw binary data
         const contents = entity.data
             ? entity.data
-            : await fs.promises.readFile(entity.file as string, 'utf8');
+            : await this.fileStorage.read(entity.file as string);
 
         const hash = getHash(contents);
         const rotatedEntityFileBaseName = entity.data
@@ -44,7 +49,7 @@ export class EntitiesProcessor {
         const rotatedEntityFile = join(directory, rotatedEntityFileBaseName);
         this.logger.info('Write file', rotatedEntityFile);
         //TODO: support raw binary data
-        await fs.promises.writeFile(rotatedEntityFile, contents, 'utf8');
+        await this.fileStorage.write(rotatedEntityFile, contents);
 
         const rotatedEntityName = `${name}_${hash}`;
         return {

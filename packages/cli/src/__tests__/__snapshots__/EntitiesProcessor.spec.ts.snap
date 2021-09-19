@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EntitiesProcessor should process both configs and secrets 1`] = `
+Object {
+  "configs": Object {
+    "website-config.yaml_ba9f826f": Object {
+      "file": "ba9f826f.website-config.yaml.config",
+    },
+  },
+  "secrets": Object {
+    "website-credentials.yaml_f709d843": Object {
+      "file": "f709d843.website-credentials.yaml.config",
+    },
+  },
+  "services": Object {
+    "website": Object {
+      "configs": Array [
+        Object {
+          "source": "website-config.yaml_ba9f826f",
+          "target": "/etc/app/config.yaml",
+        },
+      ],
+      "image": "my-image:latest",
+      "secrets": Array [
+        Object {
+          "source": "website-credentials.yaml_f709d843",
+          "target": "/etc/app/credentials.yaml",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`EntitiesProcessor should process both configs and secrets 2`] = `
+Object {
+  "build/ba9f826f.website-config.yaml.config": "hello: world",
+  "build/f709d843.website-credentials.yaml.config": "apiKey: \\"1234567890\\"",
+}
+`;
