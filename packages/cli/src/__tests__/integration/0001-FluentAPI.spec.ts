@@ -13,6 +13,7 @@ import {
 import { Types } from '../../di';
 import { EntitiesProcessor } from '../../EntitiesProcessor';
 import { FileStorageImpl_Mock, IFileStorage } from '../../FileStorage';
+import { ComposeBuilder } from '../../ComposeBuilder';
 
 function createContainer() {
     const di = new Container();
@@ -23,11 +24,13 @@ function createContainer() {
     di.bind<Logger>(Types.Logger).toConstantValue(
         new Logger({ displayFilePath: 'hidden' })
     );
+    di.bind<ComposeBuilder>(Types.ComposeBuilder).to(ComposeBuilder);
+
     return di;
 }
 
 describe('Integration-0001 Fluent API', () => {
-    it('should process fluent config', () => {
+    it('should process fluent config', async () => {
         const databaseVolume = Volume('mariadb-data');
         const cacheVolume = Volume('redis-data');
 
@@ -59,5 +62,13 @@ describe('Integration-0001 Fluent API', () => {
             .secret(websiteSecret)
             .config(websiteConfig);
         expect(spec.data).toMatchSnapshot();
+
+        //--------
+
+        const di = createContainer();
+        const cb = di.get<ComposeBuilder>(Types.ComposeBuilder);
+        const fs = di.get<FileStorageImpl_Mock>(Types.IFileStorage);
+        await cb.build(spec.data, 'build');
+        expect(fs.files).toMatchSnapshot();
     });
 });

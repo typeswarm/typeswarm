@@ -62,3 +62,47 @@ Object {
   },
 }
 `;
+
+exports[`Integration-0001 Fluent API should process fluent config 2`] = `
+Object {
+  "build/add7403b.website-config.config": "{
+  \\"hello\\": \\"world\\"
+}",
+  "build/bbf130bf.website-secret.config": "password: secret
+",
+  "build/docker-compose.yaml": "version: \\"3.7\\"
+services:
+  cache:
+    image: redis:6.0
+    volumes:
+      - type: volume
+        target: /data
+        source: redis-data
+  website:
+    image: wordpress:7.1
+    environment:
+      DATABASE_HOST: database
+      CACHE: redis:cache
+    configs:
+      - target: /etc/conf.json
+        source: website-config_add7403b
+    secrets:
+      - target: /etc/password.yaml
+        source: website-secret_bbf130bf
+  database:
+    image: mariadb:10
+    volumes:
+      - type: volume
+        target: /data
+        source: mariadb-data
+volumes:
+  ? mariadb-data
+secrets:
+  website-secret_bbf130bf:
+    file: bbf130bf.website-secret.config
+configs:
+  website-config_add7403b:
+    file: add7403b.website-config.config
+",
+}
+`;
