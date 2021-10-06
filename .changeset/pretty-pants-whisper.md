@@ -1,0 +1,5 @@
+---
+"@typeswarm/traefik": patch
+---
+
+fix
