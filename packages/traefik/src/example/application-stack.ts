@@ -32,7 +32,7 @@ const wordpress = swarm
 
 const db = swarm
     .Service('db')
-    .image(swarm.Image('myswql').tag('5.7'))
+    .image(swarm.Image('mysql').tag('5.7'))
     .env('MYSQL_DATABASE', conf.dbName)
     .env('MYSQL_USER', conf.dbUser)
     .env('MYSQL_PASSWORD', conf.dbPass)

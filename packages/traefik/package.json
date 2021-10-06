@@ -9,21 +9,23 @@
         "src"
     ],
     "scripts": {
+        "build": "tsc",
         "example:application-stack": "typeswarm render -c src/example/application-stack.ts -o application-stack.compose",
         "example:router": "typeswarm render -c src/example/router.ts -o router.compose",
         "examples": "npm run example:application-stack && npm run example:router",
-        "build": "tsc",
-        "prepublish": "npm run build"
+        "prepublishOnly": "npm run build",
+        "test": "jest"
     },
     "dependencies": {
         "@types/node": "^14.6.2",
         "dotenv": "^8.2.0",
         "immer": "^7.0.9"
     },
+    "devDependencies": {
+        "@typeswarm/cli": "0.0.16",
+        "jest": "^27.2.4"
+    },
     "peerDependencies": {
         "@typeswarm/cli": ">=0.0.16"
-    },
-    "devDependencies": {
-        "@typeswarm/cli": "0.0.16"
     }
 }

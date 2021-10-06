@@ -24,9 +24,9 @@ export const publishToTraefik = ({
     internalHttps = false,
 }: PublishToTraefikOptions) => (service: FluentService): FluentService => {
     return service
-        .when(externalNetwork, (_, externalNetwork) =>
-            _.network(swarm.ServiceNetwork(externalNetwork))
-        )
+        .when(externalNetwork, (_, externalNetwork) => {
+            return _.network(swarm.ServiceNetwork(externalNetwork));
+        })
         .with(label('traefik.enable', 'true'))
         .with(
             label(

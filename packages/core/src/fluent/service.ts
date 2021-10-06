@@ -71,7 +71,9 @@ export class FluentService {
         );
 
     network = (network: FluentServiceNetwork) =>
-        this.with(this.set(['networks', network.data.name], network.data));
+        this.with(
+            this.set(['service', 'networks', network.data.name], network.data)
+        );
 }
 
 export const ServiceFactory = (name?: string) =>
