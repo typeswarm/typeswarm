@@ -1,5 +1,12 @@
 # @typeswarm/cli
 
+## 0.2.0-5-traefik.2
+
+### Patch Changes
+
+- Updated dependencies [fac716e]
+  - @typeswarm/core@0.2.0-5-traefik.2
+
 ## 0.2.0-5-traefik.1
 
 ### Patch Changes

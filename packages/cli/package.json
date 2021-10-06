@@ -1,6 +1,6 @@
 {
     "name": "@typeswarm/cli",
-    "version": "0.2.0-5-traefik.1",
+    "version": "0.2.0-5-traefik.2",
     "description": "",
     "keywords": [],
     "repository": "typeswarm/typeswarm",
@@ -25,7 +25,7 @@
     },
     "dependencies": {
         "@types/lodash": "^4.14.161",
-        "@typeswarm/core": "0.2.0-5-traefik.1",
+        "@typeswarm/core": "0.2.0-5-traefik.2",
         "dotenv": "^8.2.0",
         "execa": "^4.0.3",
         "immer": "^9.0.6",

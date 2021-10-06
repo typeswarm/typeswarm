@@ -21,10 +21,10 @@
         "immer": "^7.0.9"
     },
     "devDependencies": {
-        "@typeswarm/cli": "0.2.0-5-traefik.1",
+        "@typeswarm/cli": "0.2.0-5-traefik.2",
         "jest": "^27.2.4"
     },
     "peerDependencies": {
-        "@typeswarm/cli": ">=0.2.0-5-traefik.1"
+        "@typeswarm/cli": ">=0.2.0-5-traefik.2"
     }
 }
