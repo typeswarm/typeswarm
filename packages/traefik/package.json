@@ -1,6 +1,6 @@
 {
     "name": "@typeswarm/traefik",
-    "version": "0.0.3",
+    "version": "1.0.0-5-traefik.0",
     "description": "",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
@@ -21,10 +21,10 @@
         "immer": "^7.0.9"
     },
     "devDependencies": {
-        "@typeswarm/cli": "0.0.16",
+        "@typeswarm/cli": "0.2.0-5-traefik.0",
         "jest": "^27.2.4"
     },
     "peerDependencies": {
-        "@typeswarm/cli": ">=0.0.16"
+        "@typeswarm/cli": ">=0.2.0-5-traefik.0"
     }
 }
