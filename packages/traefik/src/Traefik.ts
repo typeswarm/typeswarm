@@ -83,6 +83,7 @@ export const Traefik = ({
                 .ServiceVolume('/var/run/docker.sock')
                 .source('/var/run/docker.sock')
                 .readOnly()
+                .bind()
         )
         .with(constraint('node.role == manager'));
 
