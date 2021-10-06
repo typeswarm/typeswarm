@@ -13,7 +13,6 @@
         "example:application-stack": "typeswarm render -c src/example/application-stack.ts -o application-stack.compose",
         "example:router": "typeswarm render -c src/example/router.ts -o router.compose",
         "examples": "npm run example:application-stack && npm run example:router",
-        "prepublishOnly": "npm run build",
         "test": "jest"
     },
     "dependencies": {
