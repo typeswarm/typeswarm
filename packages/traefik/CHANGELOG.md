@@ -1,5 +1,11 @@
 # @typeswarm/traefik
 
+## 1.0.0-5-traefik.2
+
+### Patch Changes
+
+- 6c69bf0: fix
+
 ## 1.0.0-5-traefik.1
 
 ### Patch Changes

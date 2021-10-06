@@ -1,6 +1,6 @@
 {
     "name": "@typeswarm/traefik",
-    "version": "1.0.0-5-traefik.1",
+    "version": "1.0.0-5-traefik.2",
     "description": "",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
