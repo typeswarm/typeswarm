@@ -59,7 +59,7 @@ describe("router", () => {
                 "read_only": true,
                 "source": "/var/run/docker.sock",
                 "target": "/var/run/docker.sock",
-                "type": "volume",
+                "type": "bind",
               },
             ],
           },
