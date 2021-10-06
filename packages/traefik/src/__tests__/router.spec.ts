@@ -56,7 +56,7 @@ describe("router", () => {
                 "type": "volume",
               },
               Object {
-                "readOnly": true,
+                "read_only": true,
                 "source": "/var/run/docker.sock",
                 "target": "/var/run/docker.sock",
                 "type": "volume",
