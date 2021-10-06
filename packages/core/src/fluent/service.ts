@@ -2,8 +2,8 @@ import { StrictService } from '../normalize';
 import { _makeProduce, _makeSet, _makeWhen, _makeWith } from './common';
 import { FluentImage } from './image';
 import { FluentPort } from './port';
-import { FluentSecretDefinition } from './secret-definition';
 import { FluentServiceConfig } from './service-config';
+import { FluentServiceNetwork } from './service-network';
 import { FluentServiceVolume } from './service-volume';
 
 export interface ServiceRegistration {
@@ -15,8 +15,8 @@ export class FluentService {
     constructor(public readonly data: ServiceRegistration) {}
     with = _makeWith<FluentService>(this);
     when = _makeWhen<FluentService>(this);
-    private set = _makeSet(FluentService);
-    private produce = _makeProduce(FluentService);
+    set = _makeSet(FluentService);
+    produce = _makeProduce(FluentService);
 
     image = (image: string | FluentImage) =>
         this.with(this.set('service.image', `${image}`));
@@ -40,6 +40,20 @@ export class FluentService {
             })
         );
 
+    command = (command: string[] | string) =>
+        this.with(
+            this.produce(({ service }) => {
+                let existingCommands = service.command ?? [];
+                if (typeof existingCommands === 'string') {
+                    existingCommands = [existingCommands];
+                }
+                if (typeof command === 'string') {
+                    command = [command];
+                }
+                service.command = [...existingCommands, ...command];
+            })
+        );
+
     secret = (secret: FluentServiceConfig) =>
         this.with(
             this.produce(({ service }) => {
@@ -55,6 +69,9 @@ export class FluentService {
                 service.configs.push(config.data);
             })
         );
+
+    network = (network: FluentServiceNetwork) =>
+        this.with(this.set(['networks', network.data.name], network.data));
 }
 
 export const ServiceFactory = (name?: string) =>

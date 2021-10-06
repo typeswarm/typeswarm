@@ -1,3 +1,4 @@
+import { ok } from 'assert';
 import produce, { Draft } from 'immer';
 import { set } from 'lodash';
 
@@ -5,16 +6,28 @@ export function _makeWith<T>(inst: T) {
     return (transformer: (instance: T) => T) => transformer(inst);
 }
 
+type Truthy<T> = T extends null | undefined | false | '' ? never : T;
+
 export function _makeWhen<T>(inst: T) {
-    return (condition: boolean, transformer: (instance: T) => T) =>
-        condition ? transformer(inst) : inst;
+    return <C extends any>(
+        condition: C,
+        transformer: (instance: T, condition: Truthy<C>) => T
+    ) => {
+        if (condition) {
+            return transformer(inst, condition as Truthy<C>);
+        }
+        return inst;
+    };
 }
 
-interface ISetPlugin<I> {
+export interface ISetPlugin<I> {
     (keyValueMap: Record<string, any>): (i: I) => I;
     (key: string | string[], value: any): (i: I) => I;
 }
-interface IProducePlugin<Instance extends { data: Data }, Data extends object> {
+export interface IProducePlugin<
+    Instance extends { data: Data },
+    Data extends object
+> {
     (producer: (d: Draft<Data>) => void): (i: Instance) => Instance;
 }
 
