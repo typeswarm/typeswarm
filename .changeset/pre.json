@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "5-traefik",
+  "initialVersions": {
+    "@typeswarm/cli": "0.1.0",
+    "@typeswarm/core": "0.1.0",
+    "@typeswarm/traefik": "0.0.3"
+  },
+  "changesets": []
+}
