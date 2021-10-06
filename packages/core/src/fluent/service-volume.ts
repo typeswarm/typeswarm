@@ -19,7 +19,7 @@ export class FluentServiceVolume {
         return this.with(this.set('source', src));
     };
 
-    readOnly = () => this.with(this.set('readOnly', true));
+    readOnly = () => this.with(this.set('read_only', true));
 
     noCopy = () => this.with(this.set('volume.nocopy', true));
 
