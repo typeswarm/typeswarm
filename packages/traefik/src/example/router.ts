@@ -6,5 +6,6 @@ export const spec = swarm.Cluster().with(
         debug: true,
         https: true,
         letsencryptEmail: 'example@example.com',
+        externalNetwork: 'proxy',
     })
 ).data;

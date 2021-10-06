@@ -1,6 +1,7 @@
 import { CERT_RESOLVER } from './constants';
 import { FluentCluster } from '@typeswarm/core/lib/fluent/cluster';
 import { swarm } from '@typeswarm/core';
+import { FluentService } from '@typeswarm/core/lib/fluent/service';
 
 export interface TraefikOptions {
     debug?: boolean;
@@ -13,6 +14,17 @@ export interface TraefikOptions {
     externalNetwork?: string;
     letsencryptVolume?: string;
 }
+
+const constraint = (expr: string) => (service: FluentService) => {
+    const constraints =
+        service.data.service.deploy?.placement?.constraints ?? [];
+    return service.with(
+        service.set('service.deploy.placement.constraints', [
+            ...constraints,
+            expr,
+        ])
+    );
+};
 
 export const Traefik = ({
     debug = false,
@@ -65,7 +77,17 @@ export const Traefik = ({
             )
         )
         .when(debug, (_) => _.command('--log.level=DEBUG'))
-        .volume(swarm.ServiceVolume('/letsencrypt').source(vol));
+        .volume(swarm.ServiceVolume('/letsencrypt').source(vol))
+        .volume(
+            swarm
+                .ServiceVolume('/var/run/docker.sock')
+                .source('/var/run/docker.sock')
+                .readOnly()
+        )
+        .with(constraint('node.role == manager'));
 
-    return stack.service(traefikService).volume(vol);
+    return stack
+        .service(traefikService)
+        .volume(vol)
+        .when(net, (_, net) => _.network(net));
 };

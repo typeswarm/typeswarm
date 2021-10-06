@@ -72,7 +72,10 @@ export class FluentService {
 
     network = (network: FluentServiceNetwork) =>
         this.with(
-            this.set(['service', 'networks', network.data.name], network.data)
+            this.set(
+                ['service', 'networks', network.data.name],
+                network.data.network
+            )
         );
 }
 

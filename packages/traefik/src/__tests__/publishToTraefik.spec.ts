@@ -1,8 +1,8 @@
-import { spec } from '../example/application-stack';
+import { spec } from "../example/application-stack";
 
-describe('publishToTraefik', () => {
-    it('should generate a spec that matches the snapshot', () => {
-        expect(spec).toMatchInlineSnapshot(`
+describe("publishToTraefik", () => {
+  it("should generate a spec that matches the snapshot", () => {
+    expect(spec).toMatchInlineSnapshot(`
       Object {
         "services": Object {
           "db": Object {
@@ -41,10 +41,7 @@ describe('publishToTraefik', () => {
             },
             "image": "wordpress",
             "networks": Object {
-              "shared_proxy": Object {
-                "name": "shared_proxy",
-                "network": null,
-              },
+              "shared_proxy": null,
             },
             "volumes": Array [
               Object {
@@ -58,5 +55,5 @@ describe('publishToTraefik', () => {
         "version": "3.8",
       }
     `);
-    });
+  });
 });

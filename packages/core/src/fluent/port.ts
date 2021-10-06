@@ -16,5 +16,5 @@ export class FluentPort {
 
 export const PortFactory = (
     target: number,
-    protocol?: StrictPortMapping['protocol']
+    protocol: StrictPortMapping['protocol'] = 'tcp'
 ) => new FluentPort({ target, protocol });
