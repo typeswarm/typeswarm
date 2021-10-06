@@ -7,6 +7,7 @@
     "@typeswarm/traefik": "0.0.3"
   },
   "changesets": [
+    "chatty-toes-cry",
     "dull-deers-refuse",
     "nasty-beans-jam",
     "proud-kids-count"
