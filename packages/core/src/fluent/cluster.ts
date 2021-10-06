@@ -2,6 +2,7 @@ import { ok } from 'assert';
 import { StrictSpecification } from '../normalize';
 import { _makeSet, _makeWhen, _makeWith } from './common';
 import { FluentConfigDefinition } from './config-definition';
+import { FluentNetworkDefinition } from './network';
 import { FluentSecretDefinition } from './secret-definition';
 import { FluentService } from './service';
 import { FluentVolumeDefinition } from './volume-definition';
@@ -36,6 +37,12 @@ export class FluentCluster {
         const name = secret.data.name;
         ok(name, 'Secret name is required');
         return this.with(this.set(['secrets', name], secret.data.secret));
+    };
+
+    network = (network: FluentNetworkDefinition) => {
+        const name = network.data.name;
+        ok(name, 'Network name is required');
+        return this.with(this.set(['networks', name], network.data.network));
     };
 }
 

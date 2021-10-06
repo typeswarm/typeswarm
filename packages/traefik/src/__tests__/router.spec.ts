@@ -4,6 +4,11 @@ describe("router", () => {
   it("should generate a spec that matches the snapshot", () => {
     expect(spec).toMatchInlineSnapshot(`
       Object {
+        "networks": Object {
+          "proxy": Object {
+            "external": true,
+          },
+        },
         "services": Object {
           "traefik": Object {
             "command": Array [
@@ -21,15 +26,25 @@ describe("router", () => {
               "--certificatesresolvers.letsencrypt_resolver.acme.email=example@example.com",
               "--log.level=DEBUG",
             ],
+            "deploy": Object {
+              "placement": Object {
+                "constraints": Array [
+                  "node.role == manager",
+                ],
+              },
+            },
             "image": "traefik:v2.2",
+            "networks": Object {
+              "proxy": null,
+            },
             "ports": Array [
               Object {
-                "protocol": undefined,
+                "protocol": "tcp",
                 "published": 80,
                 "target": 80,
               },
               Object {
-                "protocol": undefined,
+                "protocol": "tcp",
                 "published": 443,
                 "target": 443,
               },
@@ -38,6 +53,12 @@ describe("router", () => {
               Object {
                 "source": "traefik_letsencrypt_data",
                 "target": "/letsencrypt",
+                "type": "volume",
+              },
+              Object {
+                "readOnly": true,
+                "source": "/var/run/docker.sock",
+                "target": "/var/run/docker.sock",
                 "type": "volume",
               },
             ],
