@@ -16,8 +16,6 @@ export interface StrictPortMapping {
     target?: number;
     published?: number;
     protocol?: string;
-
-    [k: string]: unknown; //Left for backwards compatibility
 }
 
 export interface Dictionary {
