@@ -62,7 +62,7 @@
 - className: BaseFluentServiceConfig
   dto:
     className: StrictConfig
-    module: ../normalize
+    module: ../../normalize
   methods:
     set:
       target: { data.target: string }

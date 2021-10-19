@@ -1,4 +1,4 @@
-import { StrictConfig } from "../normalize";
+import { StrictConfig } from "../../normalize";
 import { immerable } from "immer";
 import { propset } from "../utils";
 
