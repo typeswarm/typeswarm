@@ -1,12 +1,10 @@
 import { ok } from 'assert';
-import { get } from 'lodash';
 import { StrictSpecification } from '../normalize';
 import { _makeSet, _makeWhen, _makeWith } from './common';
 import { FluentConfigDefinition } from './config-definition';
 import { FluentNetworkDefinition } from './network';
 import { FluentSecretDefinition } from './secret-definition';
 import { FluentService } from './service';
-import { propset } from './utils';
 import { FluentVolumeDefinition } from './volume-definition';
 
 export class FluentCluster {

@@ -1,4 +1,4 @@
-import { StrictPortMapping } from "../../normalize";
+import { StrictConfig } from "../normalize";
 import { immerable } from "immer";
 import { propset } from "../utils";
 
@@ -11,25 +11,19 @@ import { propset } from "../utils";
 // Do not change it manually.
 // ---------------------------------------------------
 
-export class BaseFluentPort {
+export class BaseFluentServiceConfig {
   static [immerable] = true;
-  constructor(public readonly data: StrictPortMapping) {}
-  target(value: number) {
+  constructor(public readonly data: StrictConfig) {}
+  target(value: string) {
     return propset(this, "data.target", value);
   }
-  as(value: number) {
-    return propset(this, "data.published", value);
+  uid(value: string) {
+    return propset(this, "data.uid", value);
   }
-  udp() {
-    return propset(this, "data.protocol", "udp");
+  gid(value: string) {
+    return propset(this, "data.gid", value);
   }
-  tcp() {
-    return propset(this, "data.protocol", "tcp");
-  }
-  host() {
-    return propset(this, "data.mode", "host");
-  }
-  ingress() {
-    return propset(this, "data.mode", "ingress");
+  mode(value: number) {
+    return propset(this, "data.mode", value);
   }
 }

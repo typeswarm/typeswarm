@@ -3,7 +3,14 @@ import { join } from 'path';
 import YAML from 'yaml';
 import prettier from 'prettier';
 
-const rulesFile = join(__dirname, '..', 'src', 'fluent', 'generate.yaml');
+const rulesFile = join(
+    __dirname,
+    '..',
+    'src',
+    'fluent',
+    'config',
+    'generate.yaml'
+);
 const generatedFolder = join(__dirname, '..', 'src', 'fluent', 'generated');
 
 interface SetMethodDef {
@@ -43,7 +50,7 @@ async function main() {
     for (const rule of rules) {
         const moduleSource = processRule(rule);
         const moduleSourcePrettified = prettier.format(moduleSource, {
-            parser: 'typescript'
+            parser: 'typescript',
         });
         const fileName = join(generatedFolder, `${rule.className}.ts`);
         console.log(`Writing file: "${fileName}"`);
@@ -92,14 +99,27 @@ function createSetMethod(methodName: string, path: string, valueType: string) {
 }
 
 function createDictMethod(methodName: string, path: string, valueType: string) {
-    const pathStr = JSON.stringify(path);
-    return `${methodName}(key: string, value: ${valueType}) { return propset(this, ${pathStr} + "." + key, value); }`;
+    const pathStr = JSON.stringify(path + '.');
+    return `${methodName}(key: string, value: ${valueType}) { return propset(this, ${pathStr} + key, value); }`;
 }
 
 function createFlagMethod(methodName: string, path: string, value: any) {
     const pathStr = JSON.stringify(path);
     const valueStr = JSON.stringify(value);
     return `${methodName}() { return propset(this, ${pathStr}, ${valueStr}); }`;
+}
+
+function createBanner() {
+    return `
+    // ---------------------------------------------------
+    //    ___ _   _ ___  ____ ____ _ _ _ ____ ____ _  _ 
+    //     |   \\_/  |__| |___ |__  | | | |__| |__/ |\\/| 
+    //     |    |   |    |___ ___| |_|_| |  | |  \\ |  | 
+    //                                                 
+    // This file is generated automatically.
+    // Do not change it manually.
+    // ---------------------------------------------------
+    `;
 }
 
 function createClass(
@@ -143,10 +163,13 @@ function processRule(rule: Rule) {
     }
 
     const classDef = createClass(rule.className, constructor, methods);
-    return `${imports}\n${definitions}\n${classDef}`;
+
+    const banner = createBanner();
+
+    return `${imports}\n${banner}\n${definitions}\n${classDef}`;
 }
 
-main().catch(e => {
+main().catch((e) => {
     console.error(e.stack ?? e);
     process.exit(1);
 });

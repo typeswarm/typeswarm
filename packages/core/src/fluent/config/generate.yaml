@@ -1,0 +1,71 @@
+- className: BaseFluentPort
+  dto:
+    className: StrictPortMapping
+    module: '../../normalize'
+  methods:
+    set:
+      target: { data.target: number }
+      as: { data.published: number }
+    flag:
+      udp: { data.protocol: udp }
+      tcp: { data.protocol: tcp }
+      host: { data.mode: host }
+      ingress: { data.mode: ingress }
+
+- className: BaseFluentNetwork
+  imports:
+    '{ DefinitionsNetwork }': '../../compose-spec'
+  dto:
+    className: NetworkRegistration
+    definition: |
+      {
+         name?: string;
+         network: DefinitionsNetwork;
+      }
+  methods:
+    set:
+      driver: { data.network.driver: string }
+      driverOpts:
+        { data.network.driver_opts: 'Record<string, string | number>' }
+      protected strExternal: { data.network.external.name: string }
+      protected boolExternal: { data.network.external: boolean }
+    flag:
+      internal: { data.network.internal: true }
+      enableIPv6: { data.network.enable_ipv6: true }
+      attachable: { data.network.attachable: true }
+    dict:
+      label: { data.network.labels: string | number | boolean | null }
+
+- className: BaseFluentSecretDefinition
+  imports:
+    '{ DefinitionsSecret }': '../../compose-spec'
+  dto:
+    className: SecretRegistration
+    definition: |
+      {
+        name?: string;
+        secret: DefinitionsSecret;
+      }
+  methods:
+    set:
+      name: { data.secret.name: string }
+      file: { data.secret.file: string }
+      text: { data.secret.data: string }
+      protected strExternal: { data.secret.external.name: string }
+      protected boolExternal: { data.secret.external: boolean }
+      driver: { data.secret.driver: string }
+      template_driver: { data.secret.template_driver: string }
+      driverOpts: { data.secret.driver_opts: 'Record<string, string | number>' }
+    dict:
+      label: { data.secret.labels: string | number | boolean | null }
+
+- className: BaseFluentServiceConfig
+  dto:
+    className: StrictConfig
+    module: ../normalize
+  methods:
+    set:
+      target: { data.target: string }
+      uid: { data.uid: string }
+      gid: { data.gid: string }
+      mode: { data.mode: number }
