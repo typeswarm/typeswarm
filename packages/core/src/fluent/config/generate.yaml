@@ -12,6 +12,8 @@
       host: { data.mode: host }
       ingress: { data.mode: ingress }
 
+#----------------------------------------------------------------
+
 - className: BaseFluentNetwork
   imports:
     '{ DefinitionsNetwork }': '../../compose-spec'
@@ -36,6 +38,8 @@
     dict:
       label: { data.network.labels: string | number | boolean | null }
 
+#----------------------------------------------------------------
+
 - className: BaseFluentSecretDefinition
   imports:
     '{ DefinitionsSecret }': '../../compose-spec'
@@ -59,6 +63,8 @@
     dict:
       label: { data.secret.labels: string | number | boolean | null }
 
+#----------------------------------------------------------------
+
 - className: BaseFluentServiceConfig
   dto:
     className: StrictConfig
@@ -69,3 +75,44 @@
       uid: { data.uid: string }
       gid: { data.gid: string }
       mode: { data.mode: number }
+
+#----------------------------------------------------------------
+
+- className: BaseFluentServiceNetwork
+  imports:
+    '{ StrictNetwork }': '../../normalize'
+  dto:
+    className: ServiceNetwork
+    definition: |
+      {
+        name: string;
+        network: StrictNetwork | null;
+      }
+  methods:
+    set:
+      ipv4Address: { data.network.ipv4_address: string }
+      ipv6Address: { data.network.ipv6_address: string }
+      priority: { data.network.priority: number }
+    push:
+      alias: { data.network.aliases: string }
+      linkLocalIp: { data.network.link_local_ips: string }
+
+#----------------------------------------------------------------
+
+- className: BaseFluentServiceVolume
+  dto:
+    className: StrictVolume
+    module: '../../normalize'
+  methods:
+    set:
+      protected sourceStr: { data.source: string }
+      target: { data.target: string }
+      propagation: { data.bind.propagation: string }
+      consistency: { data.bind.consistency: string }
+      size: { data.tmpfs.size: number }
+    flag:
+      bind: { data.type: bind }
+      volume: { data.type: volume }
+      readOnly: { data.read_only: true }
+      readWrite: { data.read_only: false }
+      noCopy: { data.volume.nocopy: true }

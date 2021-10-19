@@ -37,6 +37,7 @@ interface Rule {
     methods: {
         set?: SetMethodDef;
         dict?: SetMethodDef;
+        push?: SetMethodDef;
         flag?: FlagMethodDef;
     };
 }
@@ -69,8 +70,11 @@ function createImports(rule: Rule) {
     }
     imports.push("import {immerable} from 'immer';");
 
-    if (rule.methods.set || rule.methods.flag) {
+    if (rule.methods.set || rule.methods.flag || rule.methods.dict) {
         imports.push("import {propset} from '../utils'");
+    }
+    if (rule.methods.push) {
+        imports.push("import {proppush} from '../utils'");
     }
 
     for (const [names, path] of Object.entries(rule.imports ?? {})) {
@@ -96,6 +100,15 @@ function createConstructor(rule: Rule) {
 function createSetMethod(methodName: string, path: string, valueType: string) {
     const pathStr = JSON.stringify(path);
     return `${methodName}(value: ${valueType}) { return propset(this, ${pathStr}, value); }`;
+}
+
+function createPushMethod(
+    methodName: string,
+    collectionPath: string,
+    valueType: string
+) {
+    const pathStr = JSON.stringify(collectionPath);
+    return `${methodName}(value: ${valueType}) { return proppush(this, ${pathStr}, value); }`;
 }
 
 function createDictMethod(methodName: string, path: string, valueType: string) {
@@ -146,6 +159,12 @@ function processRule(rule: Rule) {
     )) {
         const [path, valueType] = Object.entries(pathAndType)[0];
         methods.push(createSetMethod(methodName, path, valueType));
+    }
+    for (const [methodName, pathAndType] of Object.entries(
+        rule.methods.push ?? {}
+    )) {
+        const [path, valueType] = Object.entries(pathAndType)[0];
+        methods.push(createPushMethod(methodName, path, valueType));
     }
 
     for (const [methodName, pathAndType] of Object.entries(
