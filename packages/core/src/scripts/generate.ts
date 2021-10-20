@@ -3,15 +3,8 @@ import { join } from 'path';
 import YAML from 'yaml';
 import prettier from 'prettier';
 
-const rulesFile = join(
-    __dirname,
-    '..',
-    'src',
-    'fluent',
-    'config',
-    'generate.yaml'
-);
-const generatedFolder = join(__dirname, '..', 'src', 'fluent', 'generated');
+const rulesFile = join(__dirname, '../../src/fluent/config/generate.yaml');
+const generatedFolder = join(__dirname, '../../src/fluent/generated');
 
 interface SetMethodDef {
     [methodName: string]: { [path: string]: string };
